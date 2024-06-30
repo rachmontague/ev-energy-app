@@ -14,13 +14,18 @@
     },
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.rachcanda.evenergyapp"
+      "bundleIdentifier": "com.rachcanda.evenergyapp",
+      "infoPlist": {
+        "CFBundleDisplayName": "ev-energy-app"
+      }
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "package": "com.rachcanda.evenergyapp",
+      "versionCode": 1
     },
     "web": {
       "bundler": "metro",
@@ -28,7 +33,15 @@
       "favicon": "./assets/images/favicon.png"
     },
     "plugins": [
-      "expo-router"
+      [
+        "expo-router"
+      ],
+      [
+        "expo-location",
+        {
+          "locationAlwaysAndWhenInUsePermission": "Allow ev-energy-app to use your location."
+        }
+      ]
     ],
     "experiments": {
       "typedRoutes": true
