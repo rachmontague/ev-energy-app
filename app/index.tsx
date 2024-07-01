@@ -1,30 +1,21 @@
-import { View, StyleSheet, ActivityIndicator } from "react-native";
-
+import React, { useEffect, useState } from 'react';
+import { View, StyleSheet, ActivityIndicator } from 'react-native';
 import * as Location from 'expo-location';
-import { useEffect, useState } from "react";
-import axios from "axios";
-import MapView, { Marker } from "react-native-maps";
-
-interface POI {
-  ID: number;
-  AddressInfo: {
-    Title: string;
-    Latitude: number;
-    Longitude: number;
-  };
-}
+import MapView, { Marker } from 'react-native-maps';
+import { useNavigation, NavigationProp } from '@react-navigation/native';
+import { POI } from './types';
+import { fetchPOIs } from './services/api';
+import { RootStackParamList } from './types/navigation';
 
 export default function Index() {
-
+  const navigation = useNavigation<NavigationProp<RootStackParamList>>();
   const [location, setLocation] = useState<Location.LocationObject | null>(null);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
-
   const [pois, setPois] = useState<POI[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     (async () => {
-
       let { status } = await Location.requestForegroundPermissionsAsync();
       if (status !== 'granted') {
         setErrorMsg('Permission to access location was denied');
@@ -36,24 +27,19 @@ export default function Index() {
   }, []);
 
   useEffect(() => {
-    if (!!location) {
+    if (location) {
       fetchData();
     }
   }, [location]);
 
   const fetchData = async () => {
     try {
-      const response = await axios.get<POI[]>('https://api.openchargemap.io/v3/poi', {
-        params: {
-          output: 'json',
-          key: process.env.API_KEY,
-          maxresults: 10,
-          compact: true,
-          latitude: location?.coords.latitude,
-          longitude: location?.coords.longitude
-        },
-      });
-      setPois(response.data);
+      const data = await fetchPOIs(
+        location?.coords.latitude || 0,
+        location?.coords.longitude || 0,
+        'ef69c423-d871-495e-914b-99e278752fb6'
+      );
+      setPois(data);
       setLoading(false);
     } catch (error) {
       console.error(error);
@@ -71,13 +57,15 @@ export default function Index() {
 
   return (
     <View style={styles.container}>
-      <MapView style={styles.map}
+      <MapView
+        style={styles.map}
         initialRegion={{
           latitude: location?.coords.latitude || 0,
           longitude: location?.coords.longitude || 0,
           latitudeDelta: 0.0922,
           longitudeDelta: 0.0421,
-        }}>
+        }}
+      >
         {pois.map((poi) => (
           <Marker
             key={poi.ID}
@@ -86,6 +74,7 @@ export default function Index() {
               longitude: poi.AddressInfo.Longitude,
             }}
             title={poi.AddressInfo.Title}
+            onPress={() => navigation.navigate('Details', { poi })}
           />
         ))}
       </MapView>
