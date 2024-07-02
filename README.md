@@ -26,6 +26,20 @@ A simple mobile app that allows users to view surrounding public charging statio
 4.  Start the app:
     
     `npx expo start` 
+
+### Running on a Device
+
+To run the app on a physical device, you need to create and install a development build.
+
+#### For Android:
+
+`expo run:android` 
+
+#### For iOS:
+
+`expo run:ios` 
+
+> **Note**: For iOS, ensure you have Xcode installed and properly configured.
     
 
 ## API Usage

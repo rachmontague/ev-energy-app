@@ -4,6 +4,7 @@ import Index from './index';
 import Details from './Details';
 import { RootStackParamList } from './types/navigation';
 
+// Create a stack navigator with types defined in RootStackParamList
 const Stack = createStackNavigator<RootStackParamList>();
 
 export default function Layout() {
