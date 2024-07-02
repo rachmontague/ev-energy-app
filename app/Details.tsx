@@ -4,6 +4,7 @@ import { RouteProp } from '@react-navigation/native';
 import { RootStackParamList } from './types/navigation';
 import { startCharging } from './services/api';
 
+// Define the type for the route prop
 type DetailsScreenRouteProp = RouteProp<RootStackParamList, 'Details'>;
 
 interface DetailsProps {
@@ -13,9 +14,10 @@ interface DetailsProps {
 export default function Details({ route }: DetailsProps) {
   const { poi } = route.params;
 
+  // Function to handle the start charging button press
   const handleStartCharging = async () => {
     try {
-      await startCharging(1, 1, poi.ID);
+      await startCharging(1, 1, poi.MediaItems.ChargePointID);
       Alert.alert('Charging started successfully!');
     } catch (error) {
       if (error instanceof Error) {
@@ -29,8 +31,13 @@ export default function Details({ route }: DetailsProps) {
   return (
     <View style={styles.container}>
       <Text style={styles.title}>{poi.AddressInfo.Title}</Text>
+      <Text>Address Line 1: {poi.AddressInfo.AddressLine1}</Text>
+      <Text>Town: {poi.AddressInfo.Town}</Text>
+      <Text>Distance: {poi.AddressInfo.Distance.toFixed(2)} miles</Text>
       <Text>Latitude: {poi.AddressInfo.Latitude}</Text>
       <Text>Longitude: {poi.AddressInfo.Longitude}</Text>
+      <Text>Number of Points: {poi.NumberOfPoints}</Text>
+      <Text>Usage Cost: {poi.UsageCost}</Text>
       <Button title="Start Charging" onPress={handleStartCharging} />
     </View>
   );

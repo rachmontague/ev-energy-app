@@ -1,50 +1,86 @@
-# Welcome to your Expo app 👋
+# EV Energy App
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+## Project Description
 
-## Get started
+A simple mobile app that allows users to view surrounding public charging stations, select one to charge at, and send a request to a backend API to start charging.
 
-1. Install dependencies
+## Setup Instructions
 
-   ```bash
-   npm install
-   ```
+### Prerequisites
 
-2. Start the app
+-   Node.js
+-   Expo CLI
 
-   ```bash
-    npx expo start
-   ```
+### Installation
 
-In the output, you'll find options to open the app in a
+1.  Clone the repository:
+    
+    `git clone git@github.com:rachmontague/ev-energy-app.git` 
+    
+    ` cd ev-charging-app`
+    
+2.  Install dependencies
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
+    `npm install` 
+    
+4.  Start the app:
+    
+    `npx expo start` 
+    
 
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
+## API Usage
 
-## Get a fresh project
+### Fetching Charging Stations
 
-When you're ready, run:
+The app uses the [OpenChargeMap API](https://openchargemap.org/site/develop/api#/) to fetch nearby charging stations. The `fetchPOIs` function in `services/api.ts` handles this.
 
-```bash
-npm run reset-project
-```
+### Starting a Charging Session
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
+The app sends a POST request to `https://example.ev.energy/chargingsession` to start a charging session. The `startCharging` function in `services/api.ts` handles this.
 
-## Learn more
+## App Structure
 
-To learn more about developing your project with Expo, look at the following resources:
+### Key Files and Directories
 
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
+-   `_layout.tsx`: Sets up the app's navigation with stack navigator.
+-   `index.tsx`: Main screen displaying the map and markers for charging stations.
+-   `Details.tsx`: Displays details of the selected charging station and includes a button to start charging.
+-   `services/api.ts`: Functions to interact with the OpenChargeMap API and the backend API.
+-   `types/navigation.ts`: Defines navigation types for the stack navigator.
+-   `types/poi.ts`: Defines interfaces for data structures used in the app.
 
-## Join the community
+## How to Use the App
 
-Join our community of developers creating universal apps.
+1.  Open the app.
+2.  Allow location permissions to view nearby charging stations on the map.
+3.  Select a charging station marker to view its details.
+4.  Press "Start Charging" to initiate a charging session.
 
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+## Future Improvements
+
+1.  **Error Handling**:
+    
+    -   Enhance error handling for API requests and provide better user feedback for failed actions.
+    - Possibly add retry mechanisms
+2.  **Styling**:
+    
+    -   Improve UI/UX design for a better user experience and ensure consistent styling throughout the app.
+3.  **State Management**:
+    
+    -   Implement a state management library like Redux or Context API for managing global states, especially as the app scales.
+4.  **Testing**:
+    
+    -   Add unit and integration tests for components and API interactions to ensure reliability and robustness.
+5.  **Backend Integration**:
+    
+    -   Set up a real backend service to handle charging session requests and implement authentication and user management.
+6.  **Features**:
+    
+    -   Favourite/recently used charging points.
+    - Ability to see at a glance the availability for favourite/recently used charging points.
+    - Search this area feature on the map screen.
+    - Text input search functionality on the map screen.
+
+## Conclusion
+
+This project provides a foundation for viewing and selecting public charging stations and starting a charging session. Future improvements can enhance functionality, user experience, and robustness.

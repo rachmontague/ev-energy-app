@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import { View, StyleSheet, ActivityIndicator } from 'react-native';
+import { View, StyleSheet, ActivityIndicator, Text } from 'react-native';
 import * as Location from 'expo-location';
-import MapView, { Marker } from 'react-native-maps';
+import MapView, { Marker, Callout } from 'react-native-maps';
 import { useNavigation, NavigationProp } from '@react-navigation/native';
-import { POI } from './types';
+import { POI } from './types/poi';
 import { fetchPOIs } from './services/api';
 import { RootStackParamList } from './types/navigation';
 
@@ -15,10 +15,12 @@ export default function Index() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    // Request location permissions and fetch current location
     (async () => {
       let { status } = await Location.requestForegroundPermissionsAsync();
       if (status !== 'granted') {
         setErrorMsg('Permission to access location was denied');
+        setLoading(false);
         return;
       }
       let location = await Location.getCurrentPositionAsync({});
@@ -27,6 +29,7 @@ export default function Index() {
   }, []);
 
   useEffect(() => {
+    // Fetch POIs once location is available
     if (location) {
       fetchData();
     }
@@ -37,7 +40,7 @@ export default function Index() {
       const data = await fetchPOIs(
         location?.coords.latitude || 0,
         location?.coords.longitude || 0,
-        'ef69c423-d871-495e-914b-99e278752fb6'
+        'ef69c423-d871-495e-914b-99e278752fb6' // For security the API key should be stored outside of the code
       );
       setPois(data);
       setLoading(false);
@@ -51,6 +54,15 @@ export default function Index() {
     return (
       <View style={styles.container}>
         <ActivityIndicator size="large" color="#0000ff" />
+        {errorMsg ? <Text style={styles.errorText}>{errorMsg}</Text> : null}
+      </View>
+    );
+  }
+
+  if (errorMsg) {
+    return (
+      <View style={styles.container}>
+        <Text style={styles.errorText}>{errorMsg}</Text>
       </View>
     );
   }
@@ -73,9 +85,14 @@ export default function Index() {
               latitude: poi.AddressInfo.Latitude,
               longitude: poi.AddressInfo.Longitude,
             }}
-            title={poi.AddressInfo.Title}
-            onPress={() => navigation.navigate('Details', { poi })}
-          />
+          >
+            <Callout onPress={() => navigation.navigate('Details', { poi })}>
+              <View>
+                <Text>{poi.AddressInfo.Title}</Text>
+                <Text style={styles.calloutPrompt}>View details</Text>
+              </View>
+            </Callout>
+          </Marker>
         ))}
       </MapView>
     </View>
@@ -91,5 +108,14 @@ const styles = StyleSheet.create({
   map: {
     width: '100%',
     height: '100%',
+  },
+  errorText: {
+    marginTop: 20,
+    color: 'red',
+    fontSize: 16,
+  },
+  calloutPrompt: {
+    color: 'blue',
+    marginTop: 5,
   },
 });

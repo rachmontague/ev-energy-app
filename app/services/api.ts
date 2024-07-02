@@ -1,13 +1,14 @@
 import axios from 'axios';
-import { POI } from '../types';
+import { POI } from '../types/poi';
 
+// Fetch POIs from OpenChargeMap API
 export const fetchPOIs = async (latitude: number, longitude: number, apiKey: string): Promise<POI[]> => {
   try {
     const response = await axios.get('https://api.openchargemap.io/v3/poi', {
       params: {
         output: 'json',
         key: apiKey,
-        maxresults: 10,
+        maxresults: 25,
         compact: true,
         latitude,
         longitude,
@@ -20,7 +21,8 @@ export const fetchPOIs = async (latitude: number, longitude: number, apiKey: str
   }
 };
 
-export const startCharging = async (userId: number, carId: number, chargerId: number): Promise<void> => {
+// Start charging session
+export const startCharging = async (userId: number, carId: number, chargerId: string): Promise<void> => {
   try {
     const response = await axios.post('https://example.ev.energy/chargingsession', {
       user: userId,
