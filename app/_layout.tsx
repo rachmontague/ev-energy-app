@@ -2,7 +2,7 @@ import React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 import Index from './index';
 import Details from './Details';
-import { RootStackParamList } from './types/navigation';
+import { RootStackParamList } from './types';
 
 // Create a stack navigator with types defined in RootStackParamList
 const Stack = createStackNavigator<RootStackParamList>();

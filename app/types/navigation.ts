@@ -1,4 +1,4 @@
-import { POI } from './poi';
+import { POI } from ".";
 
 // Define navigation types for the stack navigator
 export type RootStackParamList = {

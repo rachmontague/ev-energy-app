@@ -14,10 +14,12 @@ interface DetailsProps {
 export default function Details({ route }: DetailsProps) {
   const { poi } = route.params;
 
+  console.log(poi);
+
   // Function to handle the start charging button press
   const handleStartCharging = async () => {
     try {
-      await startCharging(1, 1, poi.MediaItems.ChargePointID);
+      await startCharging(1, 1, poi.ID);
       Alert.alert('Charging started successfully!');
     } catch (error) {
       if (error instanceof Error) {
@@ -31,6 +33,7 @@ export default function Details({ route }: DetailsProps) {
   return (
     <View style={styles.container}>
       <Text style={styles.title}>{poi.AddressInfo.Title}</Text>
+      <Text>ID:{poi.ID}</Text>
       <Text>Address Line 1: {poi.AddressInfo.AddressLine1}</Text>
       <Text>Town: {poi.AddressInfo.Town}</Text>
       <Text>Distance: {poi.AddressInfo.Distance.toFixed(2)} miles</Text>

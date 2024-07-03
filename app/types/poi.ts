@@ -1,9 +1,5 @@
 export interface POI {
     ID: number;
-    MediaItems: {
-      ChargePointID: string;
-
-    };
     NumberOfPoints: string;
     UsageCost: string;
     AddressInfo: {
